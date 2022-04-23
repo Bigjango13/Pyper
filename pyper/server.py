@@ -58,6 +58,7 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
         """Handles a connection"""
         self.data = self.request.recv(4096)
         self.fmtAddress = ":".join(map(str, self.client_address))
+        self.error = None
         # Unpacks the URL in the request
         unpackedRequest = struct.unpack(
             "<L%ds" % struct.unpack("<L", self.data[0:4])[0], self.data
@@ -68,16 +69,21 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
         path = urlparse(unpackedRequest).path
         path = path if path else "/"
         # Set the default to 0x22 (Not found)
-        self.contentType, self.returndata = b"\x22", b""
+        self.contentType, self.returndata = "22", b""
         # Turn the url options into a dict
         options = dict(
             urllib.parse.parse_qsl(urllib.parse.urlsplit(unpackedRequest).query)
         )
         if path in pathToFunc.keys():
-            self.contentType, self.returndata = pathToFunc[path](
-                {"client_addr": self.client_address, "options": options}
-            )
+            try:
+                self.contentType, self.returndata = pathToFunc[path](
+                    {"client_addr": self.client_address, "options": options}
+                )
+            except Exception as e:
+                self.error = e
+                self.contentType, self.returndata = "23", b""
 
+        self.contentType = bytes.fromhex(self.contentType)
         # Encode the data to bytes
         self.returnDataEncoded = self.returndata
         if self.contentType in b"\x00\x01\x20":
@@ -85,7 +91,7 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
         elif self.contentType == b"\x02":
             self.returnDataEncoded = bytes(self.returndata, "ascii")
         elif self.contentType == b"\x22\x23":
-            # 0x22 and 0x23 don't need data, until they do pyper will force it to use no data
+            # 0x22 and 0x23 don't need data, until they do pyper will force them to use no data
             self.returnDataEncoded = b""
 
         # Pack the data
@@ -98,3 +104,5 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
         self.rawData = self.contentType + self.rawData
         self.request.send(self.rawData)
         self.request.close()
+        if self.error:
+            raise self.error

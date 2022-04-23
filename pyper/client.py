@@ -83,7 +83,8 @@ def connectFromUrl(url: str) -> str:
         port = 60
     path = data.path if data.path else ""
     options = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(url).query))
-    return (ip, port, path, options)
+    args = {"ip": ip, "port": port, "path": path, "args": options}
+    return args
 
 
 def connect(
@@ -147,9 +148,9 @@ def connect(
         newUrl = receivedUnpacked.decode("utf-8")
         msg = getUrlRedirect(ip, port, newUrl)
         if redirectsAllowed:
-            id, msg = connect(*msg, redirectsAllowed=redirectsAllowed - 1)
+            id, msg = connect(**msg, redirectsAllowed=redirectsAllowed - 1)
         else:
-            msg = getHostname(*msg)
+            msg = getHostname(**msg)
     elif id == b"\x22":
         # Resource not found
         msg = "0x22: Resource not found. :("
