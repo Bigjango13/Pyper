@@ -26,7 +26,7 @@ An example server and an example client can be found under the [examples](https:
 
 ### Pyper
 
-These are variables that are build directly into the `__init__.py` file of pyper.
+These are variables that are built directly into the `__init__.py` file of pyper.
 
 #### Piper specification version
 
@@ -44,7 +44,7 @@ These content types can be used instead of the ids for content types, here they 
 `internalError` (23)<br>
 `specVersion` (24)<br>
 
-There is also a dictonary that can be used to translate the ids into more human friendly variants, it is called `contentType`
+There is also a dictonary that can be used to translate the ids into more human friendly variants, it is called `contentType`.
 
 ### Client
 
