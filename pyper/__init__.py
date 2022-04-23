@@ -3,7 +3,7 @@ Piper: https://github.com/Luminoso-256/piper
 Pyper: https://github.com/Bigjango13/pyper"""
 from pyper import client, server
 
-specVersion = "0.8.0"
+piperSpecVersion = "0.8.0"
 # Content types
 utf8 = "00"
 gemtext = "01"
@@ -22,8 +22,8 @@ contentType = {
     redirect: "Redirect",
     notFound: "Content not found",
     internalError: "Internal server error",
-    specVersion: "Diffrent specification version. (" + specVersion + ")",
+    specVersion: "Diffrent specification version. (Currently on version " + piperSpecVersion + ")",
     "F0": "Invalid data",
 }
 
-__all__ = ("client", "server", "specVersion")
+__all__ = ("client", "server")

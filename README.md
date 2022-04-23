@@ -12,6 +12,28 @@ pip3 install git+https://github.com/Bigjango13/Pyper
 
 An example server and an example client can be found under the [examples](https://github.com/Bigjango13/Pyper/tree/main/examples) directory.
 
+### Pyper
+
+These are variables that are build directly into the `__init__.py` file of pyper.
+
+#### Piper specification version
+
+The piper specification version that pyper is currently based on can be accesesed throught the `piperSpecVersion` variables.
+
+#### Content types
+These content types can be used instead of the ids for content types, here they are:
+
+`utf8` (00)
+`gemtext` (01)
+`ascii` (02)
+`file` (10)
+`redirect` (20)
+`notFound` (22)
+`internalError` (23)
+`specVersion` (24)
+
+There is also a dictonary that can be used to translate the ids into more human friendly variants, it is called `contentType`
+
 ### Client
 
 #### `getUrlRedirect(originalUrl, originalUrlPort, url)`
