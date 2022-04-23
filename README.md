@@ -3,9 +3,21 @@ The [Piper](https://github.com/Luminoso-256/piper) networking protocol in Python
 
 ## How to install?
 
-I haven't uploaed to pip yet, until then it can be installed with
+The version on pypi is the stable version, and the version on github is the development version.
+
+To get it from pypi use:
+```bash
+pip3 install pyper-piper
+```
+
+To install from github use:
 ```bash
 pip3 install git+https://github.com/Bigjango13/Pyper
+```
+
+If you are making you're own changes to pyper it can be installed with 
+```bash
+pip3 install path/to/pyper
 ```
 
 ## How to use?

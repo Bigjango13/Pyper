@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pyper-piper",
-    version="0.1",
+    version="0.1.3",
     description="The Piper networking protocol in Python.",
     url="https://github.com/Bigjango13/Pyper",
     author="Bigjango13",
@@ -17,7 +17,7 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
-        "Operating System :: Os Independent",
+        "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Topic :: Communications",
         "Topic :: Communications :: File Sharing",
