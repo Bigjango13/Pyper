@@ -23,14 +23,14 @@ The piper specification version that pyper is currently based on can be accesese
 #### Content types
 These content types can be used instead of the ids for content types, here they are:
 
-`utf8` (00)
-`gemtext` (01)
-`ascii` (02)
-`file` (10)
-`redirect` (20)
-`notFound` (22)
-`internalError` (23)
-`specVersion` (24)
+`utf8` (00)<br>
+`gemtext` (01)<br>
+`ascii` (02)<br>
+`file` (10)<br>
+`redirect` (20)<br>
+`notFound` (22)<br>
+`internalError` (23)<br>
+`specVersion` (24)<br>
 
 There is also a dictonary that can be used to translate the ids into more human friendly variants, it is called `contentType`
 
