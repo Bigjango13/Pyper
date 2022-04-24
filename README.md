@@ -45,10 +45,10 @@ There are also some content types from [libpiper](https://github.com/RandomSoup/
 `clientOutOfMemory` (F0)<br>
 `clientConnectionError` (F1)<br>
 `clientInternalError` (F2)<br>
-There is also one I added to handle invaid data send from the server.<br>
+There is also one I added to handle invaid data sent from the server.<br>
 `clientInvalidData` (F3)<br>
 
-There is also a dictonary that can be used to translate the ids into more human friendly variants, it is called `contentType`.
+There is also a dictonary that can be used to translate the content types into more human friendly variants, it is called `contentType`.
 
 #### Debugging
 
@@ -101,8 +101,7 @@ pyperServer = pyper.server.PyperServer()
 
 @pyperServer.parseRequest("/")
 def index(request):
-    return pyper.ascii, "This is the index"
+    return pyper.common.ascii, "This is the index"
 
 pyperServer.start()
 ```
-
