@@ -2,6 +2,8 @@ import socket
 import struct
 import urllib.parse
 
+from pyper.common import pyperDebug
+
 
 def getUrlRedirect(originalUrl: str, originalUrlPort: int = 60, url: str = "/") -> str:
     """Gets the url to redirect to.
@@ -111,29 +113,40 @@ def connect(
     :return: (ID, content)
     """
     hostname = getHostname(ip, port, path, args)
+    # Remove the "piper://hostname:port" part
+    hostname = hostname[hostname.index(str(port)) + len(str(port)) :]
     # Connect the socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((ip, port))
     # Pack the request
     request = struct.pack(
-        "<L%ds" % len(hostname), len(hostname), hostname.encode("utf-8")
+        "<H%ds" % len(hostname), len(hostname), hostname.encode("utf-8")
     )
+    if pyperDebug:
+        print(request)
     sock.sendall(request)
-    # Recive the data
-    received = sock.recv(4096)
+    # Receive the data
+    received = b""
+    while (data := sock.recv(4096)) != b"":
+        received += data
     try:
         # Unpack the data
         receivedUnpacked = struct.unpack(
-            "<L%ds" % struct.unpack("<L", received[1:5])[0], received[1:]
+            "<Q%ds" % struct.unpack("<Q", received[1:9])[0], received[1:]
         )[1]
+        if pyperDebug:
+            print(received)
     except:
-        return b"\xF0", "Error: Invalid data"
+        return "F3", received
     # Set the default message
     msg = (
         "The data was fomatted incorrectly or an error occurred, here is the raw data: "
         + str(received)
     )
     id = received[0:1]
+    # Don't let the server send client side content types
+    if id.hex().upper()[1] == "F":
+        return "F3", received
     if id in b"\x00\x01":
         # Gemtext and unicode
         msg = receivedUnpacked.decode("utf-8")

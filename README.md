@@ -24,9 +24,7 @@ pip3 install path/to/pyper
 
 An example server and an example client can be found under the [examples](https://github.com/Bigjango13/Pyper/tree/main/examples) directory.
 
-### Pyper
-
-These are variables that are built directly into the `__init__.py` file of pyper.
+### Common
 
 #### Piper specification version
 
@@ -43,8 +41,18 @@ These content types can be used instead of the ids for content types, here they 
 `notFound` (22)<br>
 `internalError` (23)<br>
 `specVersion` (24)<br>
+There are also some content types from [libpiper](https://github.com/RandomSoup/libpiper) for compatibility.<br>
+`clientOutOfMemory` (F0)<br>
+`clientConnectionError` (F1)<br>
+`clientInternalError` (F2)<br>
+There is also one I added to handle invaid data send from the server.<br>
+`clientInvalidData` (F3)<br>
 
 There is also a dictonary that can be used to translate the ids into more human friendly variants, it is called `contentType`.
+
+#### Debugging
+
+The `pyperDebug` variable will toggle printing the packets, it defaults to whatever `PYPER_DEBUG` is set to (None in most cases) but can be changed in python.
 
 ### Client
 
@@ -72,7 +80,7 @@ If `redirectsAllowed` is not equal to zero it will also automatically follow red
 
 #### `PyperServer`
 
-##### `__init__(ip, port)`
+##### `__init__(port)`
 
 Creates a pyper server and binds it to the ip and port.
 

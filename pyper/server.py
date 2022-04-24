@@ -3,26 +3,27 @@ import struct
 import urllib.parse
 from urllib.parse import urlparse
 
+from pyper.common import pyperDebug
+
 pathToFunc = {}
 
 
 class PyperServer:
-    def __init__(self, ip="localhost", port=60):
+    def __init__(self, port=60):
         """Takes the ip and port of the server and binds the pyper server to the ip and port
 
         :param ip: The ip to bind the server to
         :type path: str
         :param port: The port to bind the server to, defualts to 60
         :type port: int"""
-        self.ip = ip
         self.port = port
         self.serverClass = PyperTCPServer
-        self.server = socketserver.TCPServer((ip, port), self.serverClass)
+        self.server = socketserver.TCPServer(("localhost", port), self.serverClass)
         self.server.allow_reuse_address = True
 
     def start(self):
         """Starts the pyper server"""
-        print("Started server on " + self.ip + ":" + str(self.port) + ".")
+        print("Started server on localhost:" + str(self.port) + ".")
         print("Ctrl+C to quit.")
         try:
             with self.server:
@@ -59,15 +60,22 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
         self.data = self.request.recv(4096)
         self.fmtAddress = ":".join(map(str, self.client_address))
         self.error = None
+
+        if pyperDebug:
+            print(self.data)
         # Unpacks the URL in the request
-        unpackedRequest = struct.unpack(
-            "<L%ds" % struct.unpack("<L", self.data[0:4])[0], self.data
-        )[1].decode()
-        # Log the request
-        print("<" + self.fmtAddress + ">", unpackedRequest)
+        try:
+            unpackedRequest = struct.unpack(
+                "<H%ds" % struct.unpack("<H", self.data[0:2])[0], self.data
+            )[1].decode()
+        except:
+            self.request.close()
+            return
         # Set path
         path = urlparse(unpackedRequest).path
         path = path if path else "/"
+        # Log the request
+        print("<" + self.fmtAddress + ">", path)
         # Set the default to 0x22 (Not found)
         self.contentType, self.returndata = "22", b""
         # Turn the url options into a dict
@@ -96,12 +104,14 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
 
         # Pack the data
         self.rawData = struct.pack(
-            "<L%ds" % len(self.returnDataEncoded),
+            "<Q%ds" % len(self.returnDataEncoded),
             len(self.returnDataEncoded),
             self.returnDataEncoded,
         )
         # Add the content type
         self.rawData = self.contentType + self.rawData
+        if pyperDebug:
+            print(self.rawData)
         self.request.send(self.rawData)
         self.request.close()
         if self.error:

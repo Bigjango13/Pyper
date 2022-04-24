@@ -11,7 +11,7 @@ pyperServer = pyper.server.PyperServer(port=8080)
 def homePageExample(request):
     # An example of text
     # The return value is (contentType, content)
-    return pyper.ascii, "Helloworld"
+    return pyper.common.ascii, "Helloworld"
 
 
 @pyperServer.parseRequest("/download")
@@ -26,19 +26,19 @@ def fileExample(request):
             if not (file.startswith("..") or file.startswith("/")):
                 # Read the file as bianary and send it
                 with open(__file__, "rb") as f:
-                    return pyper.file, f.read()
+                    return pyper.common.file, f.read()
 
     # Return not found message.
-    # I am not using pyper.notFound becuase then people can't tell if
+    # I am not using pyper.common.notFound becuase then people can't tell if
     # the page doesn't exist or just the file doesn't exist
-    return pyper.ascii, "File not found"
+    return pyper.common.ascii, "File not found"
 
 
 @pyperServer.parseRequest("/redirect")
 def redirectExample(request):
     # Note: Don't include the first slash in redirects.
     # This will redirect to a download of this file.
-    return pyper.redirect, "download?file=" + basename(__file__)
+    return pyper.common.redirect, "download?file=" + basename(__file__)
 
 
 @pyperServer.parseRequest("/error")
