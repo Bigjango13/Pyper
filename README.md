@@ -105,3 +105,7 @@ def index(request):
 
 pyperServer.start()
 ```
+
+if the option is "*" pyper will use it as a fallback for when a page isn't found (good for making a custom 0x22 page).
+
+`request` is dictionary that includes `client_addr` (the address of the client), `options` (a dictionary of the url options), and `path` (the url path).

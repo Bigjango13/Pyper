@@ -82,11 +82,25 @@ class PyperTCPServer(socketserver.BaseRequestHandler):
         options = dict(
             urllib.parse.parse_qsl(urllib.parse.urlsplit(unpackedRequest).query)
         )
-        if path in pathToFunc.keys():
+        if path in pathToFunc.keys() or "*" in pathToFunc.keys():
             try:
-                self.contentType, self.returndata = pathToFunc[path](
-                    {"client_addr": self.client_address, "options": options}
-                )
+                if path in pathToFunc.keys():
+                    self.contentType, self.returndata = pathToFunc[path](
+                        {
+                            "client_addr": self.client_address,
+                            "options": options,
+                            "path": path,
+                        }
+                    )
+                # Allows falling back to "*" if a path isn't mapped to a function
+                elif "*" in pathToFunc.keys():
+                    self.contentType, self.returndata = pathToFunc["*"](
+                        {
+                            "client_addr": self.client_address,
+                            "options": options,
+                            "path": path,
+                        }
+                    )
             except Exception as e:
                 self.error = e
                 self.contentType, self.returndata = "23", b""

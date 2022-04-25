@@ -38,7 +38,7 @@ def connectAndPrint(server):
             pyper.common.internalError,
             pyper.common.specVersion,
         ]:
-            print("[Error]:", pyper.contentType[contentType])
+            print("[Error]:", pyper.common.contentType[contentType])
         # Unknown id
         else:
             print("[Error]: Unknown code, here is the raw data:", contentType, content)

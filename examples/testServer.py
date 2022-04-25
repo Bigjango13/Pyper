@@ -3,7 +3,7 @@ from os.path import basename, exists
 
 import pyper
 
-# Set pyper to a new pyper server running on port 8080 (not 60 because ports under 1024 need root).
+# Set pyper to a new pyper server running on port 8080 (not 60 because ports under 1024 need root on *nix).
 pyperServer = pyper.server.PyperServer(port=8080)
 
 
@@ -24,8 +24,8 @@ def fileExample(request):
         if exists(file):
             # Don't allow directory backtracking.
             if not (file.startswith("..") or file.startswith("/")):
-                # Read the file as bianary and send it
-                with open(__file__, "rb") as f:
+                # Read the file as binary and send it
+                with open(file, "rb") as f:
                     return pyper.common.file, f.read()
 
     # Return not found message.
@@ -45,6 +45,17 @@ def redirectExample(request):
 def internalServerErrorExample(request):
     # An example of a internal server error
     raise Exception
+
+
+@pyperServer.parseRequest("*")
+def fallbackExample(request):
+    # An example on how can fallback on a function if a path isn't mapped.
+    if request["path"] == "/erorr":
+        # Redirect from a typo to error
+        return pyper.common.redirect, "error"
+    else:
+        # Return a custom 0x22 message.
+        return pyper.common.utf8, "Oh no! Page not found."
 
 
 # Start running the app.
