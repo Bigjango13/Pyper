@@ -18,12 +18,12 @@ class PyperServer:
         :type port: int"""
         self.port = port
         self.serverClass = PyperTCPServer
-        self.server = socketserver.TCPServer(("localhost", port), self.serverClass)
+        self.server = socketserver.TCPServer(("0.0.0.0", port), self.serverClass)
         self.server.allow_reuse_address = True
 
     def start(self):
         """Starts the pyper server"""
-        print("Started server on localhost:" + str(self.port) + ".")
+        print("Started server on 0.0.0.0:" + str(self.port) + ".")
         print("Ctrl+C to quit.")
         try:
             with self.server:

@@ -39,8 +39,7 @@ def getHostname(ip: str, port: int, path: str, args: dict = {}) -> str:
     :return: hostname"""
     hostname = "piper://" if not ip.startswith("piper://") else ""
     hostname += ip
-    if port != 60:
-        hostname += ":" + str(port)
+    hostname += ":" + str(port)
     if path not in ["/", ""]:
         if not path.startswith("/"):
             hostname += "/"
